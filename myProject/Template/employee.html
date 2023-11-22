@@ -3,6 +3,54 @@
 
 {% block content %}
 
-<h1>Employee</h1>
+
+
+<h1>Employee Details</h1>
+
+<table>
+  <tr>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Mobile</th>
+    <th>Actions</th>
+  </tr>
+  {% for i in employee %}
+  <tr>
+    <td>{{i.FirstName}}</td>
+    <td>{{i.LastName}}</td>
+    <td>{{i.Mobile}}</td>
+    <td class="text-center">
+      <div class="actions">
+         <a href=" {% url 'editEmployee' i.id %} " class="btn btn-sm bg-success-light mr-2">
+         <i class="fas fa-pen"></i>
+         </a>
+         <a href="#" class="btn btn-sm bg-danger-light">
+         <i class="fas fa-trash"></i>
+         </a>
+      </div>
+   </td>
+  </tr>
+  {% endfor %}
+  
+</table>
+<h1>Add Employee</Details></h1>
+
+<div>
+    <form  action=" {% url 'addEmployee' %} "  method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <label for="fname">First Name</label>
+      <input type="text"  name="firstname" placeholder="Your name.." required>
+  
+      <label >Last Name</label>
+      <input type="text"  name="lastname" placeholder="Your last name.." required>
+  
+      <label >Mobile Number</label>
+      <input type="text"  name="mobile" placeholder="Your Mobile Number.." required>
+
+      
+
+      <input type="submit" value="Submit">
+    </form>
+  </div>
 
 {% endblock  %}

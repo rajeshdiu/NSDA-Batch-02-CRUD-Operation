@@ -1,9 +1,10 @@
 {% block content %}
 <ul>
-    <li><a class="active" href=" {% url 'homePage' %} ">Home</a></li>
+    <li><a class="active" href=" {% url 'indexPage' %} ">Home</a></li>
     <li><a href=" {% url 'studentPage' %} ">Student</a></li>
     <li><a href=" {% url 'teacherPage' %}  ">Teacher</a></li>
     <li><a href=" {% url 'employeePage' %}  ">Employee</a></li>
+    <li><a href=" {% url 'staffPage' %}  ">Staff</a></li>
     <li style="float:right"><a href="#about">Logout</a></li>
   </ul>
 {% endblock %}

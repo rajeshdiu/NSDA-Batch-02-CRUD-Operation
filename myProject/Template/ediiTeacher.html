@@ -1,0 +1,34 @@
+{% extends 'home.html' %}
+
+{% block content %}
+
+
+<h1>Edit Teacher</Details></h1>
+
+<div>
+    <form  action=" {% url 'updateTeacher' %} "  method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% for i in teacher %}
+        <label for="fname">Teacher ID</label>
+        <input type="text"  value="{{i.id}}" name="teacherid" placeholder="Your name.." required>
+
+      <label for="fname">First Name</label>
+      <input type="text" value="{{i.FirstName}}" name="firstname" placeholder="Your name.." required>
+  
+      <label >Last Name</label>
+      <input type="text" value="{{i.LastName}}" name="lastname" placeholder="Your last name.." required>
+  
+      <label >Mobile Number</label>
+      <input type="text" value="{{i.Mobile}}"  name="mobile" placeholder="Your Mobile Number.." required>
+
+      
+
+      <input type="submit" value="Submit">
+
+      {% endfor %}
+    </form>
+  </div>
+
+
+{% endblock %}
