@@ -32,4 +32,11 @@ urlpatterns = [
     path('editStaff/<str:id>',views.editStaff,name="editStaff"),
     path('updateStaff/',views.updateStaff,name="updateStaff"),
     
+    
+    path('libraryPage/',views.libraryPage,name="libraryPage"),
+    path('addLibrary/',views.addLibrary,name="addLibrary"),
+    path('editLibrary/<str:id>',views.editLibrary,name="editLibrary"),
+    path('updateLibrary',views.updateLibrary,name="updateLibrary"),
+    path('deleteLibrary/<str:id>',views.deleteLibrary,name="deleteLibrary"),
+    
 ]

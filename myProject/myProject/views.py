@@ -255,6 +255,66 @@ def updateStaff(request):
         return redirect("staffPage")
     
     
+def libraryPage(request):
+    
+    library=Library_Model.objects.all()
+    
+    context={
+        'library':library,
+    }
+    return render(request,"library.html",context)
+
+def addLibrary(request):
+    
+     if request.method=="POST":
+        book_name=request.POST.get("bookname")
+        author_name=request.POST.get("authorname")
+        country_name=request.POST.get("countryname")
+        
+        library=Library_Model(
+            BookName=book_name,
+            AuthorName=author_name,
+            CountryName=country_name,
+        )
+        library.save()
+        
+        return redirect("libraryPage")
+    
+def editLibrary(request,id):
+    
+    library=Library_Model.objects.filter(id=id)
+    
+    context={
+        'library':library,
+    }
+    
+    return render(request,'editLibrary.html',context)
+
+    
+
+def updateLibrary(request):
     
     
+     if request.method=="POST":
+        library_id=request.POST.get("libraryid")
+        book_name=request.POST.get("bookname")
+        author_name=request.POST.get("authorname")
+        country_name=request.POST.get("countryname")
+        
+        library=Library_Model(
+            id=library_id,
+            BookName=book_name,
+            AuthorName=author_name,
+            CountryName=country_name,
+        )
+        library.save()
+        
+        return redirect("libraryPage")
     
+def deleteLibrary(request,id):
+    
+    library=Library_Model.objects.filter(id=id)
+    
+    library.delete()
+    
+    return redirect("libraryPage")

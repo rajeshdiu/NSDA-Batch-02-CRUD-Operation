@@ -1,0 +1,35 @@
+
+{% extends 'home.html' %}
+
+{% block content %}
+
+
+
+<h1>Edit Library</h1>
+
+
+<div>
+    <form  action=" {% url 'updateLibrary' %} "  method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for i in library %}
+        <label for="fname">Library ID</label>
+        <input type="text" value="{{i.id}}" name="libraryid" placeholder="Your library id.." required>
+    
+      <label for="fname">Book Name</label>
+      <input type="text" value="{{i.BookName}}" name="bookname" placeholder="Your name.." required>
+  
+      <label >Author Name</label>
+      <input type="text" value="{{i.AuthorName}}"   name="authorname" placeholder="Your last name.." required>
+  
+      <label >Country Name</label>
+      <input type="text" value="{{i.CountryName}}"  name="countryname" placeholder="Your Mobile Number.." required>
+
+      <input type="submit" value="Update">
+
+      {% endfor %}
+
+    </form>
+  </div>
+
+
+{% endblock  %}
