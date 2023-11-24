@@ -1,19 +1,62 @@
-from django.shortcuts import redirect,render
+from django.shortcuts import redirect,render,HttpResponse
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from myApp.models import *
 
+def logoutPage(request):
+    
+    logout(request)
+    
+    return render(request,"login.html")
 
+def loginPage(request):
+    
+    if request.method=='POST':
+        
+        username=request.POST.get("username")
+        pass1=request.POST.get("password")
+        
+        user = authenticate(username=username, password=pass1)
+        
+        if user is not None:
+            login(request,user)
+            return redirect("indexPage")
+            
+    return render(request,'login.html')
+
+def signupPage(request):
+    
+    if request.method=='POST':
+        
+        username=request.POST.get("username")
+        email=request.POST.get("email")
+        pass1=request.POST.get("password1")
+        pass2=request.POST.get("password2")
+        
+        if pass1!=pass2:
+            return HttpResponse("Not Match")
+        
+        else:
+            user = User.objects.create_user(username, email, pass1)
+            user.save()
+            return redirect("loginPage")
+        
+    return render(request,'signup.html')
+
+@login_required
 def indexPage(request):
     
     return render(request,"index.html")
     
-
-
+@login_required
 def homePage(request):
     
     return render(request,"home.html")
 
-
+@login_required
 def studentPage(request):
     
     student=Student_Models.objects.all()
@@ -24,6 +67,7 @@ def studentPage(request):
     
     return render(request,"student.html",context)
 
+@login_required
 def teacherPage(request):
     
     teacher=Teacher_Model.objects.all()
@@ -34,8 +78,7 @@ def teacherPage(request):
     
     return render(request,"teacher.html",context)
 
-
-
+@login_required
 def employeePage(request):
     
     employee=Employee_Model.objects.all()
@@ -44,29 +87,36 @@ def employeePage(request):
         'employee':employee,
     }
     
-    
     return render(request,"employee.html",context)
 
-
+@login_required
 def addTeacher(request):
+    
+    my_message = {
+        'add_failed': 'Teacher Add Failed',
+        'add_Success': 'Teacher Add Successfully',
+    }
     
     if request.method=="POST":
         fname=request.POST.get("firstname")
         lname=request.POST.get("lastname")
         phone=request.POST.get("mobile")
+        profile_pic = request.FILES.get('profilepic')
         
-        student=Teacher_Model(
+        teacher=Teacher_Model(
             FirstName=fname,
             LastName=lname,
             Mobile=phone,
+            profile_pic=profile_pic,
         )
-        student.save()
+        teacher.save()
+        messages.success(request,my_message["add_Success"])
         
         return redirect("teacherPage")
         
     return render(request,"teacher.html")
 
-
+@login_required
 def ediiTeacher(request,id):
     
     teacher=Teacher_Model.objects.filter(id=id)
@@ -74,10 +124,9 @@ def ediiTeacher(request,id):
     context={
         'teacher':teacher,
     }
-    
-
     return render(request,"ediiTeacher.html",context)
 
+@login_required
 def updateTeacher(request):
     
     if request.method=="POST":
@@ -95,19 +144,29 @@ def updateTeacher(request):
         teacher.save()
         
         return redirect("teacherPage")
+    
+@login_required 
+def deleteTeacher(request,id):
+    
+    teacher=Teacher_Model.objects.filter(id=id)
+    teacher.delete()
+    
+    return redirect("teacherPage")
 
-
+@login_required
 def addStudent(request):
     
     if request.method=="POST":
         fname=request.POST.get("firstname")
         lname=request.POST.get("lastname")
         phone=request.POST.get("mobile")
-        
+        profile_pic = request.FILES.get('profilepic')
+     
         student=Student_Models(
             FirstName=fname,
             LastName=lname,
             Mobile=phone,
+            profile_pic=profile_pic
         )
         student.save()
         
@@ -115,6 +174,7 @@ def addStudent(request):
         
     return render(request,"student.html")
 
+@login_required
 def editStudent(request,id):
     
     student=Student_Models.objects.filter(id=id)
@@ -124,6 +184,7 @@ def editStudent(request,id):
     
     return render(request,"editStudent.html",context)
 
+@login_required
 def updateStudent(request):
 
     if request.method=="POST":
@@ -131,12 +192,14 @@ def updateStudent(request):
         fname=request.POST.get("firstname")
         lname=request.POST.get("lastname")
         phone=request.POST.get("mobile")
+        profilepic = request.FILES.get('profile_pic')
         
         student=Student_Models(
             id=student_id,
             FirstName=fname,
             LastName=lname,
             Mobile=phone,
+            profile_pic=profilepic,
         )
         student.save()
         
@@ -144,18 +207,28 @@ def updateStudent(request):
         
     return render(request,"student.html")
 
+@login_required
+def deleteStudent(request,id):
+    
+    student=Student_Models.objects.filter(id=id)
+    student.delete()
+    
+    return redirect("studentPage")
 
+@login_required
 def addEmployee(request):
     
     if request.method=="POST":
         fname=request.POST.get("firstname")
         lname=request.POST.get("lastname")
         phone=request.POST.get("mobile")
+        profile_pic = request.FILES.get('profilepic')
         
         employee=Employee_Model(
             FirstName=fname,
             LastName=lname,
             Mobile=phone,
+            profile_pic=profile_pic
         )
         employee.save()
         
@@ -163,6 +236,7 @@ def addEmployee(request):
         
     return render(request,"employee.html")
 
+@login_required
 def editEmployee(request,id):
     
     employee=Employee_Model.objects.filter(id=id)
@@ -172,20 +246,22 @@ def editEmployee(request,id):
     
     return render(request,"editEmployee.html",context)
 
-
-def updateStudent(request):
+@login_required
+def updateEmployee(request):
 
     if request.method=="POST":
         employee_id=request.POST.get("employeeid")
         fname=request.POST.get("firstname")
         lname=request.POST.get("lastname")
         phone=request.POST.get("mobile")
+        profile_pic = request.FILES.get('profilepic')
         
         employee=Employee_Model(
             id=employee_id,
             FirstName=fname,
             LastName=lname,
             Mobile=phone,
+            profile_pic=profile_pic,
         )
         employee.save()
         
@@ -193,7 +269,7 @@ def updateStudent(request):
         
     return render(request,"employee.html")
 
-
+@login_required
 def staffPage(request):
     
     staff=Staff_Model.objects.all()
@@ -205,24 +281,26 @@ def staffPage(request):
     
     return render(request,"staff.html",context)
 
+@login_required
 def addStaff(request):
-    
-    
     
      if request.method=="POST":
         fname=request.POST.get("firstname")
         lname=request.POST.get("lastname")
         phone=request.POST.get("mobile")
+        profile_pic = request.FILES.get('profilepic')
         
         staff=Staff_Model(
             FirstName=fname,
             LastName=lname,
             Mobile=phone,
+            profile_pic=profile_pic
         )
         staff.save()
         
         return redirect("staffPage")
 
+@login_required
 def editStaff(reqiest,id):
     
     staff=Staff_Model.objects.filter(id=id)
@@ -234,7 +312,7 @@ def editStaff(reqiest,id):
     
     return render(reqiest,"editStaff.html",context)
 
-
+@login_required
 def updateStaff(request):
     
     
@@ -254,7 +332,7 @@ def updateStaff(request):
         
         return redirect("staffPage")
     
-    
+@login_required  
 def libraryPage(request):
     
     library=Library_Model.objects.all()
@@ -264,22 +342,27 @@ def libraryPage(request):
     }
     return render(request,"library.html",context)
 
+@login_required
 def addLibrary(request):
     
      if request.method=="POST":
         book_name=request.POST.get("bookname")
         author_name=request.POST.get("authorname")
         country_name=request.POST.get("countryname")
+        profile_pic = request.FILES.get('profilepic')
         
         library=Library_Model(
             BookName=book_name,
             AuthorName=author_name,
             CountryName=country_name,
+            profile_pic=profile_pic
         )
         library.save()
         
         return redirect("libraryPage")
-    
+ 
+ 
+@login_required   
 def editLibrary(request,id):
     
     library=Library_Model.objects.filter(id=id)
@@ -291,7 +374,7 @@ def editLibrary(request,id):
     return render(request,'editLibrary.html',context)
 
     
-
+@login_required
 def updateLibrary(request):
     
     
@@ -310,7 +393,8 @@ def updateLibrary(request):
         library.save()
         
         return redirect("libraryPage")
-    
+
+@login_required 
 def deleteLibrary(request,id):
     
     library=Library_Model.objects.filter(id=id)

@@ -6,7 +6,7 @@
 <h1>Edit Employee</Details></h1>
 
 <div>
-    <form  action=" {% url 'updateStudent' %} "  method="post" enctype="multipart/form-data">
+    <form  action=" {% url 'updateEmployee' %} "  method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         {% for i in employee %}

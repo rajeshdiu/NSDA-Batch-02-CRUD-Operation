@@ -6,6 +6,8 @@
     <li><a href=" {% url 'employeePage' %}  ">Employee</a></li>
     <li><a href=" {% url 'staffPage' %}  ">Staff</a></li>
     <li><a href=" {% url 'libraryPage' %}  ">Library</a></li>
-    <li style="float:right"><a href="#about">Logout</a></li>
+    <li><a href="">Welcome {{user.FirstName}}</a></li>
+    <li style="float:right"><a href="  ">Profile</a></li>
+    <li style="float:right"><a href=" {% url 'logoutPage' %} ">Logout</a></li>
   </ul>
 {% endblock %}

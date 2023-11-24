@@ -7,11 +7,14 @@
 
 <h1>Teacher Details</h1>
 
+{% include 'message.html' %}
+
 <table>
   <tr>
     <th>First Name</th>
     <th>Last Name</th>
     <th>Mobile</th>
+    <th>Image</th>
     <th>Actions</th>
   </tr>
   {% for i in student %}
@@ -19,13 +22,18 @@
     <td>{{i.FirstName}}</td>
     <td>{{i.LastName}}</td>
     <td>{{i.Mobile}}</td>
+    <td>
+      <h2 class="table-avatar">
+         <a href="" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="/{{i.profile_pic}}" alt="User Image"></a>
+      </h2>
+   </td>
   
     <td class="text-center">
       <div class="actions">
          <a href=" {% url 'ediiTeacher' i.id %} " class="btn btn-sm bg-success-light mr-2">
          <i class="fas fa-pen"></i>
          </a>
-         <a href="#" class="btn btn-sm bg-danger-light">
+         <a href=" {% url 'deleteTeacher' i.id %} " class="btn btn-sm bg-danger-light">
          <i class="fas fa-trash"></i>
          </a>
       </div>
@@ -37,7 +45,7 @@
 <h1>Teacher Add</Details></h1>
 
 <div>
-    <form  action=" {% url 'addStudent' %} "  method="post" enctype="multipart/form-data">
+    <form  action=" {% url 'addTeacher' %} "  method="post" enctype="multipart/form-data">
         {% csrf_token %}
       <label for="fname">First Name</label>
       <input type="text"  name="firstname" placeholder="Your name.." required>
@@ -48,6 +56,9 @@
       <label >Mobile Number</label>
       <input type="text"  name="mobile" placeholder="Your Mobile Number.." required>
 
+      
+      <label >Profile Pic</label>
+      <input type="file"  name="profilepic" placeholder="Your last name.." required>
       
 
       <input type="submit" value="Submit">

@@ -1,17 +1,14 @@
-
 {% extends 'home.html' %}
 
 {% block content %}
 
-
-
 <h1>Student Details</h1>
-
 <table>
   <tr>
     <th>First Name</th>
     <th>Last Name</th>
     <th>Mobile</th>
+    <th>Image</th>
     <th>Actions</th>
   </tr>
   {% for i in student %}
@@ -19,16 +16,16 @@
     <td>{{i.FirstName}}</td>
     <td>{{i.LastName}}</td>
     <td>{{i.Mobile}}</td>
-    <td class="text-center">
-      <div class="actions">
-         <a href=" {% url 'editStudent' i.id %} " class="btn btn-sm bg-success-light mr-2">
-         <i class="fas fa-pen"></i>
-         </a>
-         <a href="#" class="btn btn-sm bg-danger-light">
-         <i class="fas fa-trash"></i>
-         </a>
-      </div>
+    <td>
+      <h2 class="table-avatar">
+         <a href="" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="/{{i.profile_pic}}" alt="User Image"></a>
+      </h2>
    </td>
+    <td>
+      
+      <a href="{% url 'editStudent' i.id %}"> <button>Edit</button> </a>
+      <a href="{% url 'deleteStudent' i.id %}"> <button class="button button3">Red</button> </a>
+    </td>
   </tr>
   {% endfor %}
   
@@ -47,9 +44,8 @@
   
       <label >Mobile Number</label>
       <input type="text"  name="mobile" placeholder="Your Mobile Number.." required>
-
-      
-
+      <label >Profile Pic</label>
+      <input type="file"  name="profilepic" placeholder="Your last name.." required>
       <input type="submit" value="Submit">
     </form>
   </div>

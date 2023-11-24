@@ -7,14 +7,17 @@
 
 <h1>Edit Student</h1>
 
-
 <div>
     <form  action=" {% url 'updateStudent' %} "  method="post" enctype="multipart/form-data">
         {% csrf_token %}
         
 {% for i in student %}
 
-        
+
+<div class="card">
+  <img src="/{{i.profile_pic}}" alt="John" style="width:100%">
+</div>
+  
       <label for="fname">Student ID</label>
       <input type="text" value="{{i.id}}" name="studentid" placeholder="Your ID.." required>
 
@@ -23,12 +26,14 @@
   
       <label >Last Name</label>
       <input type="text" value="{{i.LastName}}"  name="lastname" placeholder="Your last name.." required>
-  
+      
+      
       <label >Mobile Number</label>
       <input type="text" value="{{i.Mobile}}"  name="mobile" placeholder="Your Mobile Number.." required>
 
-      
-
+      <label >Profile Pic</label>
+      <input type="file"  name="profile_pic" placeholder="Your last name.." required>
+  
       <input type="submit" value="Update">
       
   {% endfor %}
